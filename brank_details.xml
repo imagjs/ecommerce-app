@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<imag>
+    <page>
+        <title style="alpha:0.5;background:#000000">
+            <left>
+                <button role="back"/>
+            </left>
+            <center><label style="#000000;font-size:15">dyson 戴森</label></center>
+            <right>
+                <button type="icon" icon="share.png" style="margin-right:10"/>
+            </right>
+        </title>
+        <header>
+            <row><img style="width:100%" src="http://img1.mpimg.cn/bmiddle/2013/9/22/a9021b83-a2b6-4cad-945a-50a0dfd45610.jpg"/></row>
+        </header>
+        <content>
+            <list type="transparent">
+                <item style="background:#ffffff;col-width:70,*,30">
+                    <col>
+                        <row><img src="http://pn.zdmimg.com/201412/18/45ae137.png"/></row>
+                    </col>
+                    <col>
+                        <row><label style="font-size:10;color:#333333">dyson 戴森</label></row>
+                        <row><label style="font-size:10;color:#999999">在售商品17个</label></row>
+                    </col>
+                    <col>
+                        <row><icon style="align:center" src="attention.png"/></row>
+                        <row><label style="font-size:10;color:#666666;align:center">关注</label></row>
+                    </col>
+                </item>
+                <item style="background:#ffffff">
+                    <col><row>
+                        <label style="font-size:10;color:#666666">戴森公司是一家英国的工程技术创新公司，核心技术拥有超过1900个专利的保护，产品行销全球65个国家</label>
+                    </row></col>
+                </item>
+                <item style="background:#ffffff;padding:10 17;margin-top:9">
+                    <col><row><label style="font-size:11;color:#333333">热销</label></row></col>
+                    <col><row><button style="background:details_right.png;align:right"/></row></col>
+                </item>
+                <item style="background:#ffffff;margin-top:1;padding:0">
+                    <col style="padding:10 6">
+                        <row><label style="font-size:10;color:#333333">手持式除螨家居</label></row>
+                        <row><label style="font-size:10;color:#e31436">$399</label><label></label></row>
+                    </col>
+                    <col style="padding:10 6">
+                        <row><label style="font-size:10;color:#333333">dyson 戴森 AM06 无页风扇 台式风扇</label></row>
+                        <row><label style="font-size:10;color:#e31436">$2588</label><label></label></row>
+                    </col>
+                    <col style="padding:10 6">
+                        <row><label style="font-size:10;color:#333333">dyson 戴森 V6 7个吸头</label></row>
+                        <row><label style="font-size:10;color:#e31436">$3599</label><label></label></row>
+                    </col>
+                </item>
+                <item style="background:#ffffff;padding:10 17;margin-top:9">
+                    <col><row><label style="font-size:11;color:#333333">新品</label></row></col>
+                    <col><row><button style="background:details_right.png;align:right"/></row></col>
+                </item>
+                <item style="background:#ffffff;margin-top:1;padding:0">
+                    <col style="padding:10 6">
+                        <row><label style="font-size:10;color:#333333">手持式除螨家居</label></row>
+                        <row><label style="font-size:10;color:#e31436">$399</label><label></label></row>
+                    </col>
+                    <col style="padding:10 6">
+                        <row><label style="font-size:10;color:#333333">dyson 戴森 AM06 无页风扇 台式风扇</label></row>
+                        <row><label style="font-size:10;color:#e31436">$2588</label><label></label></row>
+                    </col>
+                    <col style="padding:10 6">
+                        <row><label style="font-size:10;color:#333333">dyson 戴森 V6 7个吸头</label></row>
+                        <row><label style="font-size:10;color:#e31436">$3599</label><label></label></row>
+                    </col>
+                </item>
+            </list>
+        </content>
+    </page>
+</imag>
