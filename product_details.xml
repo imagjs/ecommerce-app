@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<imag>
+    <script>
+       <![CDATA[
+           $page.onload=function()
+           {
+           //init_product_details();
+           		init_slideimage();
+           }
+           function init_slideimage()
+           {
+           		var source="http://www.imagapp.com/project/imag/imag-Koala/data/product_details.json";
+           		$http.get(source,function(data)
+           		{
+          			var product_details=JSON.parse(data).product_data;
+           			var item = [];
+                    for (var i=0;i<3;i++)
+           			{
+           			item[i] = $C('<slideimage-item><item src="'+product_details[0].product_image[i]+'"/><item-slideimage>');
+                    $('slideimage').add(item[i]);
+        			} 
+                    $('price').text = '¥' + product_details[0].price;
+        			$('previous_price').text = '¥' + product_details[0].previous_price;
+            		$('product_name').text = product_details[0].product_name;
+        			$('product_introduce').text = product_details[0].product_introduce;
+        			$('product_tag').text = product_details[0].product_tag;
+                    $('deliver').text = product_details[1].deliver;
+                    $('explanation').text = product_details[1].explanation;
+                    for (var i=0;i<2;i++)
+                    {
+                                $('comment_image'+i).src = product_details[0].comment[i].comment_image;
+                                $('user_portrait'+i).src = product_details[0].comment[i].user_portrait;
+                                $('user_name'+i).text = product_details[0].comment[i].user_name;
+                                $('comment'+i).text = product_details[0].comment[i].comment;
+                    }
+        			$('brand_image').src = product_details[2].brand_image;
+           			$('brand').text = product_details[2].brand;
+        			$('onsell').text = product_details[2].onsell;
+        			$('brand_introduction').text = product_details[2].brand_introduction;
+                    for (var i=0;i<2;i++)
+                         {
+                                $('other_image'+i).src = product_details[0].other_goods[i].other_image;
+                                $('other_name'+i).text = product_details[0].other_goods[i].other_name;
+                                $('other_price'+i).text = '¥' + product_details[0].other_goods[i].other_price;
+                                $('other_formerprice'+i).text = '¥' + product_details[0].other_goods[i].other_formerprice;
+                        }
+                }) 
+                
+           }
+           
+       ]]> 
+    </script>
+    <page>
+        <title style="padding:0 13;background:#ffffff">
+            <left><icon src="back.png" onclick="$page.close()"/></left>
+            <center>
+                <label style="color:#fff;background:#cccccc" onclick="$page.refresh()">refresh</label>
+            </center>
+            <right><icon src="share.png"/></right>
+        </title>
+        <content>
+            <slideimage id="slideimage" style="height:205;background:#ffffff">
+            </slideimage>
+            <list>
+                <item>
+                    <row>
+                        <label id="price" style="font-size:18;color:#e41335;padding:0 8"></label>
+                        <label id="previous_price" style="font-size:9;color:#999999;padding-right:8;text-decoration:line-through"></label>
+                        <label style="font-size:10;color:#ffffff;background:#fd8586">特价</label>
+                    </row>
+                </item>
+                <item>
+                    <label id="product_name" style="font-size:14;color:#333333;padding-top:20;font-weight:bold"></label>
+                    <label id="product_introduce" style="font-size:12;color:#313131;padding-top:15"></label>
+                    <label id="product_tag" style="font-size:10;color:#6b6b6b;padding-top:15"></label>
+                </item>
+                <item style="background:#f1f0ee;padding:6 0">
+                    <col style="background:#ffffff;padding:7 8">
+                        <row><label id="deliver" style="font-size:12;color:#313131;padding-bottom:7"></label></row>
+                        <row><label id="explanation" style="font-size:12;color:#313131"></label></row>
+                    </col>
+                </item>
+                <item style="padding:10">
+                    <col>
+                        <row>
+                            <label style="font-size:13;padding:10">其他小伙伴们说</label>
+                        </row>
+                    </col>
+                </item>
+                <item>
+                    <col>
+                        <row><img id="comment_image0" src=""/></row>
+                        <row>
+                            <img id="user_portrait0" style="height:20;width:20;margin:6" src="" effect="round"/>
+                            <label id="user_name0" style="font-size:10;color:#313131"></label>
+                        </row>
+                        <row>
+                            <label id="comment0" style="font-size:10;color:#313131"></label>
+                        </row>  
+                    </col>
+                    <col>
+                        <row><img id="comment_image1" src=""/></row>
+                        <row>
+                            <img id="user_portrait1" style="height:20;width:20;margin:6" src="" effect="round"/>
+                            <label id="user_name1" style="font-size:11;color:#313131"></label>
+                        </row>
+                        <row>
+                            <label id="comment1" style="font-size:10;color:#313131"></label>
+                        </row>  
+                    </col>
+                </item>
+                <item style="col-width:80,*,*;padding:0">
+                    <col><img id="brand_image" src=""/></col>
+                    <col>
+                        <row><label id="brand" style="font-size:9;color:#333333;padding-bottom:7"></label></row>
+                        <row><label id="onsell" style="font-size:9;color:#999999"></label></row>
+                    </col>
+                    <col>
+                        <row><icon src="attention.png" style="align:right;margin:16 16 4"/></row>
+                        <row><label style="font-size:9;color:#656565;align:right;margin:0 18 4">关注</label></row>
+                    </col>
+                </item>
+                <item>
+                    <col>
+                        <row>
+                            <label id="brand_introduction" style="font-size:11;color:#2e2e2e"></label>
+                        </row>
+                    </col>
+                </item>
+            </list>
+            <list>
+                <item>
+                    <screens>
+                        <screen>
+                            <list>
+                                <item> 
+                                    <col>
+                                        <row><img id="other_image0" src="" style="height:90;align:center"/></row>
+                                        <row><label id="other_name0" style="font-size:10;color:#313131;align:center"></label></row>
+                                        <row>
+                                            <label id="other_price0" style="font-size:10;color:#cb1d38;align:center;padding-right:5"></label>
+                                            <label id="other_formerprice0" style="font-size:7;color:#989898;align:center;text-decoration:line-through"></label>
+                                        </row>
+                                    </col>
+                                    <col>
+                                        <row><img id="other_image1" src="" style="height:90;align:center"/></row>
+                                        <row><label id="other_name1" style="font-size:10;color:#313131;align:center"></label></row>
+                                        <row>
+                                            <label id="other_price1" style="font-size:10;color:#cb1d38;align:center;padding-right:5"></label>
+                                            <label id="other_formerprice1" style="font-size:7;color:#989898;align:center;text-decoration:line-through"></label>
+                                        </row>
+                                    </col>
+                                </item>
+                            </list>
+                        </screen>
+                    </screens>
+                </item>
+            </list>
+        </content>
+    </page>
+</imag>
