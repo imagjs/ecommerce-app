@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<imag>
+    <page>
+        <title style="background:#ffffff">
+            <left><button style="color:#333333" role="back"> Back</button></left>
+            <center><label style="font-size:14;color:#333333">设置</label></center>
+        </title>
+        <content>
+            <list type="group" style="background:#ffffff;margin:1 0 0 0">
+                <item style="padding:15 13"><row><label style="font-size:12;color:#333333">消息推送设置</label></row></item>
+                <item style="padding:15 13"><row><label style="font-size:12;color:#333333">清除缓存</label></row></item>
+                <item style="padding:15 13"><row><label style="font-size:12;color:#333333">商品详情页弹幕</label><checkbox style="tint-color:#53d769;align:right;height:25;width:45" type="switch"></checkbox></row></item>
+            </list>
+            <list type="group" style="background:#ffffff;margin:8 0 17">
+                <item style="padding:15 13"><row><label style="font-size:12;color:#333333">关于考拉</label><label style="font-size:10;color:#999999;align:right">v3.0.4</label></row></item>
+            </list>
+            <row><button style="background:null;color:#e31436;align:center;border:1 #e31436;corner-radius:5;height:34;width:135">退出当前账号</button></row>
+        </content>
+    </page>
+</imag>
