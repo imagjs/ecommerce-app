@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="utf-8"?>
+<imag>
+    <script>
+        <![CDATA[
+            var item_count;
+            $page.onload = function(){
+            	init_category();
+                init_shoppingcar();
+            }
+            function init_category(){
+            	var source = 'http://www.imagapp.com/project/imag/imag-Koala/data/category.json';
+                $http.get(source,function(data)
+                {
+            		var category = JSON.parse(data).category;
+            		for (var i=0;i<12;i++)
+                    {
+            			$('category_name'+i).text = category[i].category_name;
+            			$('category_details'+i).text = category[i].category_details;
+            			$('category_image'+i).src = category[i].category_image;
+        				$('category_name'+i).css('color:#333333; font-size:11');
+                        $('category_details'+i).css('color:#999999;font-size:9')
+            		}
+                })   
+            }
+            
+            function init_shoppingcar(){
+                var source="http://www.imagapp.com/project/imag/imag-Koala/data/shopping_car.json";
+                $http.get(source,function(data){
+                    var shopping_car=JSON.parse(data).shoppingcar_data;
+           			item_count = shopping_car.length;
+                    $('num').text = '('+item_count+')';
+                    var listJson = {items:[]};
+                    for (var i=0;i<shopping_car.length;i++){
+                        var price = shopping_car[i].price;
+                        var number = shopping_car[i].number;
+                        var discount = shopping_car[i].discount
+                        var cost = price*number-discount;
+                        var itemJson0 = {
+                            template:0,
+                            widgets:{
+                                radio:{
+                                    id:'radio'+i,
+                                    onclick:'change_shopcar('+i+')',
+                                    src:'shopcar_normal.png'
+                                		},
+                                radio2:{
+                                    id:'radioo'+i,
+                                    onclick:'change_shopcar('+i+')',
+                                    src:'shopcar_normal.png'
+                                		},
+                                ship_address:{text:shopping_car[i].ship_address},
+                                product_image:{src:shopping_car[i].product_image},
+                                product_name:{
+                                    text:shopping_car[i].product_name,
+                                    onclick:"$page.open('product_details.xml')"
+                                			},
+                                price:{text:'¥'+price},
+                                number:{text:'*'+number},
+                                discount:{text:'活动优惠：-￥'+discount},
+                                cost:{
+                                    id:'cost'+i,
+                                    text:'本仓总计（不含税）：￥'+cost}
+                            }
+                        }
+                        listJson.items.push(itemJson0);
+                    }
+                    $('list').update(listJson);
+                })
+               
+            }
+            
+            var money;
+            var select_count = 0;
+            function refresh_money(money){
+                money = parseFloat(money).toFixed(2);
+                $('total_money').text = '¥'+money;
+            }
+            function change_shopcar(i){
+                money = parseFloat($('total_money').text.substring(1));
+                var icon = $('radio'+i).src;
+                var str = $('cost'+i).text.substring(11);
+                if (icon=='shopcar_normal.png')
+                {
+                    $('radio'+i).src = 'shopcar_select.png';
+                    $('radioo'+i).src = 'shopcar_select.png';
+                    money = money + parseFloat(str);
+                    select_count = select_count + 1;
+                    //alert('select_count:'+select_count+', item_count:'+item_count);
+                    if (select_count == item_count)
+                    {
+                        $('total_select').src = 'shopcar_select.png';
+                    }
+                    
+                }else
+                {
+                    $('radio'+i).src='shopcar_normal.png';
+                    $('radioo'+i).src='shopcar_normal.png';
+                    
+                    money = money - parseFloat(str);
+                    select_count = select_count - 1;
+                    //alert('select_count:'+select_count+', item_count:'+item_count);
+                    if (select_count !== item_count)
+                    {
+                        $('total_select').src = 'shopcar_normal.png';
+                    }  
+                    
+                }
+                refresh_money(money); 
+            }
+            function total_money(){
+                var sum = 0;
+                for(i=0;i<item_count;i++){
+                    var str = $('cost'+i).text.substring(11);
+                    sum = sum + parseFloat(str);
+                }
+                refresh_money(sum);
+            }
+            function selectAll(){
+                var str=$('total_select').src;
+                if(str=='shopcar_normal.png'){
+                    for(var i=0;i<item_count;i++){
+                    	$('radio'+i).src='shopcar_select.png';
+                    	$('radioo'+i).src='shopcar_select.png';
+                    }
+                    $('total_select').src='shopcar_select.png';
+                	total_money();
+                	select_count = 2;
+                }
+                else{
+                    for(var i=0;i<item_count;i++){
+                        $('radio'+i).src='shopcar_normal.png';
+                        $('radioo'+i).src='shopcar_normal.png';
+                    }
+                    $('total_select').src='shopcar_normal.png';
+                    $('total_money').text='¥0.00';
+                	select_count = 0;
+                }
+            }
+        ]]>
+    </script>
+    <page>
+        <tabs>
+            <tab label="首页" icon="homepage_normal.png,homepage_select.png" style="label-color:#000000,#c91f3a">
+                <title style="background:#ffffff;padding:10 13">
+                    <left><button onclick="" style="background:sweep.png;height:20;width:20"></button></left>      
+                        <center>
+                            <input type="search" placeholder="在众多App开发中选择iMAG" 
+                            style="tint-color:#ffffff;background:#e6e6e6;color:#323232;width:281;font-size:10;corner-radius:5"/>        
+                        </center>
+                    <right><button onclick="" style="background:message.png;height:20;width:20"></button></right>
+                </title>
+                <header>
+                    <tabbar style="background:#ffffff;label-color:#717171,#303030;indicator-color:#d80b08">
+                        <item label="推荐"></item>
+                        <item label="精选"></item>
+                        <item label="国内"></item>
+                        <item label="海淘"></item>
+                        <item label="母婴"></item>
+                        <item label="美妆"></item>
+                    </tabbar>
+                </header>
+                <contents>
+                    <content style="background:#FFFAFA">
+                        <slideimage style="height:186" indicatorPosition="right" fillwidth="true" autoplay="true">
+                            <item src="http://img1.efu.com.cn/upfile/bdvt/m-3d97ae02-1f65-463e-a0ad-cf1a39013135.png"/>
+                            <item src="http://img1.efu.com.cn/upfile/bdvt/m-7034ba7b-1177-4173-ad7a-4755957ef15a.jpg"/>
+                        </slideimage>
+                        <list style="height:55" type="transparent">
+                            <item style="padding:12 26 9">
+                                <col>
+                                    <row style="background:signin.png;height:17;width:17"></row>
+                                    <row><label style="font-size:11;align:center;color:#5c5c5c;padding-top:3">今日签到</label></row>
+                                </col>
+                                <col>
+                                    <row style="background:update.png;height:17;width:17"></row>
+                                    <row><label style="font-size:11;align:center;color:#5c5c5c;padding-top:3">每日上新</label></row>
+                                </col>
+                                <col>
+                                    <row style="background:shoplimit.png;height:17;width:17"></row>
+                                    <row><label style="font-size:11;align:center;color:#5c5c5c;padding-top:3">限时抢购</label></row>
+                                </col>
+                                <col>
+                                    <row style="background:discount.png;height:17;width:17"></row>
+                                    <row><label style="font-size:11;align:center;color:#5c5c5c;padding-top:3">推荐有礼</label></row>
+                                </col>
+                            </item>
+                        </list>
+                        <list>
+                            <item style="padding:0">
+                                <img src="http://www.ifooday.cn/uploadfile/2016/0322/20160322035136275.jpg" style="height:190;width:100%"/>
+                            </item>
+                            <item style="col-width:*,10,*,10,*,10,*">
+                                <col>
+                                    <row style="height:58;width:58"><img src="http://www.ly-egou.com:8081/images/201410/goods_img/709_G_1413160450752.jpg"/></row>
+                                    <row><label style="font-size:10;color:#2f2f2f;align:center">贝婴美 可睿心婴儿配方</label></row>
+                                    <row><label style="font-size:10;color:#c91b34;align:center">¥ 99</label></row>
+                                </col>
+                                <col></col>
+                                <col>
+                                    <row style="height:58;width:58"><img src="http://www.ly-egou.com:8081/images/201410/goods_img/709_G_1413160450752.jpg"/></row>
+                                    <row><label style="font-size:10;color:#2f2f2f;align:center">贝婴美 可睿心婴儿配方</label></row>
+                                    <row><label style="font-size:10;color:#c91b34;align:center">¥ 99</label></row>
+                                </col>
+                                <col></col>
+                                <col>
+                                    <row style="height:58;width:58"><img src="http://www.ly-egou.com:8081/images/201410/goods_img/709_G_1413160450752.jpg"/></row>
+                                    <row><label style="font-size:10;color:#2f2f2f;align:center">贝婴美 可睿心婴儿配方</label></row>
+                                    <row><label style="font-size:10;color:#c91b34;align:center">¥ 99</label></row>
+                                </col>
+                                <col></col>
+                                <col>
+                                    <row style="height:58;width:58"><img src="http://www.ly-egou.com:8081/images/201410/goods_img/709_G_1413160450752.jpg"/></row>
+                                    <row><label style="font-size:10;color:#2f2f2f;align:center">贝婴美 可睿心婴儿配方</label></row>
+                                    <row><label style="font-size:10;color:#c91b34;align:center">¥ 99</label></row>
+                                </col>
+                            </item>
+                        </list>
+                        <list>
+                            <item style="padding:0">
+                                <img src="http://cy.2958.cn/upload/article/20140910/58261387431410315586.jpg" style="height:190;width:100%"/>
+                            </item>
+                            <item>
+                                <col>
+                                    <row style="height:58;width:58"><img src="http://img4.duitang.com/uploads/blog/201406/21/20140621092731_dKWE4.jpeg"/></row>
+                                    <row><label style="font-size:10;color:#2f2f2f;align:center">奈莳 舒服软底鞋</label></row>
+                                    <row><label style="font-size:10;color:#c91b34;align:center">¥ 99</label></row>
+                                </col>
+                                <col>
+                                    <row style="height:58;width:58"><img src="http://images.xiu.com/images_new/goods201103/410201/360761/268354/ori.jpg"/></row>
+                                    <row><label style="font-size:10;color:#2f2f2f;align:center">NewBalance 鞋</label></row>
+                                    <row><label style="font-size:10;color:#c91b34;align:center">¥ 99</label></row>
+                                </col>
+                                <col>
+                                    <row style="height:58;width:58"><img src="http://imgst-dl.meilishuo.net/pic/_o/2a/5c/7742b1ef0cefe0fb1d7322121cdd_800_800.jpeg"/></row>
+                                    <row><label style="font-size:10;color:#2f2f2f;align:center">韩牛 松糕鞋</label></row>
+                                    <row><label style="font-size:10;color:#c91b34;align:center">¥ 99</label></row>
+                                </col>
+                                <col>
+                                    <row style="height:58;width:58"><img src="http://ec4.images-amazon.com/images/I/61LxqpeaVkL._UL1500_.jpg"/></row>
+                                    <row><label style="font-size:10;color:#2f2f2f;align:center">李宁 透气短袖</label></row>
+                                    <row><label style="font-size:10;color:#c91b34;align:center">¥ 99</label></row>
+                                </col>
+                            </item>
+                        </list>
+                    </content>
+                    <content></content>
+                    <content></content>
+                    <content></content>
+                    <content></content>
+                    <content></content>
+                </contents>
+            </tab>
+            <tab label="分类" icon="classification_normal.png,classification_select.png" style="label-color:#000000,#c91f3a">
+                <title style="background:#ffffff;padding:10 13">
+                    <left><button onclick="" style="background:sweep.png;height:20;width:20"></button></left>      
+                        <center>
+                            <input type="search" placeholder="陪你吃遍星辰大海" 
+                            style="tint-color:#ffffff;background:#e6e6e6;color:#323232;width:281;font-size:10;corner-radius:5"/>        
+                        </center>
+                    <right><button onclick="" style="background:message.png;height:20;width:20"></button></right>
+                </title>
+                <content>
+                    <list>
+                        <item style="background:#cccccc;padding:1px 0 0;">
+                            <col style="background:#ffffff;padding:6 5">
+                                <row style="padding:10 9">
+                                    <label style="color:#666666;font-size:10">全部分类  </label>
+                                    <label style="color:#999999;font-size:12">category</label>
+                                </row>
+                            </col>
+                        </item>
+                        <item style="padding:10 0 15">
+                            <col>
+                                <row><label id="category_name0" style="align:center"/></row>
+                                <row><label id="category_details0" style="align:center"/></row>
+                                <row><img id="category_image0" style="width:100;height:90;align:center"/></row>
+                            </col>
+                            <col>
+                                <row><label id="category_name1" style="align:center"/></row>
+                                <row><label id="category_details1" style="align:center"/></row>
+                                <row><img id="category_image1" style="width:100;height:90;align:center"/></row>
+                            </col>
+                            <col>
+                                <row><label id="category_name2" style="align:center"/></row>
+                                <row><label id="category_details2" style="align:center"/></row>
+                                <row><img id="category_image2" style="width:100;height:90;align:center"/></row>
+                            </col>
+                        </item>
+                        <item style="padding:10 0 15">
+                            <col>
+                                <row><label id="category_name3" style="align:center"/></row>
+                                <row><label id="category_details3" style="align:center"/></row>
+                                <row><img id="category_image3" style="width:100;height:90;align:center"/></row>
+                            </col>
+                            <col>
+                                <row><label id="category_name4" style="align:center"/></row>
+                                <row><label id="category_details4" style="align:center"/></row>
+                                <row><img id="category_image4" style="width:100;height:90;align:center"/></row>
+                            </col>
+                            <col>
+                                <row><label id="category_name5" style="align:center"/></row>
+                                <row><label id="category_details5" style="align:center"/></row>
+                                <row><img id="category_image5" style="width:100;height:90;align:center"/></row>
+                            </col>
+                        </item>
+                        <item style="padding:10 0 15">
+                            <col>
+                                <row><label id="category_name6" style="align:center"/></row>
+                                <row><label id="category_details6" style="align:center"/></row>
+                                <row><img id="category_image6" style="width:100;height:90;align:center"/></row>
+                            </col>
+                            <col>
+                                <row><label id="category_name7" style="align:center"/></row>
+                                <row><label id="category_details7" style="align:center"/></row>
+                                <row><img id="category_image7" style="width:100;height:90;align:center"/></row>
+                            </col>
+                            <col>
+                                <row><label id="category_name8" style="align:center"/></row>
+                                <row><label id="category_details8" style="align:center"/></row>
+                                <row><img id="category_image8" style="width:100;height:90;align:center"/></row>
+                            </col>
+                        </item>
+                        <item style="padding:10 0 15">
+                            <col>
+                                <row><label id="category_name9" style="align:center"/></row>
+                                <row><label id="category_details9" style="align:center"/></row>
+                                <row><img id="category_image9" style="width:100;height:90;align:center"/></row>
+                            </col>
+                            <col>
+                                <row><label id="category_name10" style="align:center"/></row>
+                                <row><label id="category_details10" style="align:center"/></row>
+                                <row><img id="category_image10" style="width:100;height:90;align:center"/></row>
+                            </col>
+                            <col>
+                                <row><label id="category_name11" style="align:center"/></row>
+                                <row><label id="category_details11" style="align:center"/></row>
+                                <row><img id="category_image11" style="width:100;height:90;align:center"/></row>
+                            </col>
+                        </item>
+                    </list>
+                </content>
+            </tab>
+            <tab label="购物车" icon="shopcar.png,shopping_car.png" style="label-color:#000000,#c91f3a">
+                <title style="background:#ffffff;padding:0 13">
+                    <center>
+                        <label style="font-size:15;color:#333333">购物车</label>
+                        <label id="num" style="font-size:15;color:#333333"></label>
+                    </center>
+                    <right>
+                        <label style="font-size:12;color:#333333;padding-right:17">编辑</label><button type="icon" style="background:message.png;height:20;width:20"/>
+                    </right>
+                </title>
+                <content>
+                    <list reuse="true" id="list">
+                        <item style="padding:0">
+                            <col style="background:#f0f0f0;">
+                                <row style="background:#ffffff;margin-top:1;padding:12 8">
+                                    <icon reusekey="radio"/>
+                                    <icon style="margin:10 8" src="shop.png"/>
+                                    <label reusekey="ship_address" style="font-size:12;color:#333333"/>
+                                </row>
+                                <row style="background:#ffffff;margin-top:1;padding:0 8">
+                                    <icon reusekey="radio2"/>
+                                    <img reusekey="product_image" style="height:42;width:35;margin:10"/>
+                                    <label reusekey="product_name" style="font-size:11"/>
+                                    <label reusekey="price" style="font-size:11;color:#333333;align:right"/>
+                                    <label reusekey="number" style="font-size:11;color:#333333;align:right;margin-left:8"/>
+                                </row>
+                                <row style="background:#ffffff;margin-top:1"><label reusekey="discount" style="font-size:11;color:#333333;align:right;padding:8 8"/></row>
+                                <row style="background:#ffffff"><label reusekey="cost" style="font-size:11;color:#333333;align:right;padding:0 8 8"/></row>
+                            </col>
+                        </item>
+                    </list>
+                </content>
+                <footer style="background:#ffffff">
+                    <list>
+                        <item style="padding:0">
+                            <row>
+                                <icon onclick="selectAll()" id="total_select" style="margin-left:8" src="shopcar_normal.png"/>
+                                <label onclick="selectAll()" style="font-size:12">  全选</label>
+                                <label style="align:right;font-size:12">总价：</label>
+                                <label id="total_money" style="font-size:15;color:#e31436;align:right;padding-right:8">¥0.00</label>
+                                <label style="font-size:12;color:#e31436;align:right"></label><button style="font-size:13;background:#e31436;color:#ffffff;align:right;height:40">结算</button>
+                            </row>
+                        </item>
+                    </list>
+                </footer>
+            
+            </tab>
+            <tab label="我的考拉" icon="mine_normal.png,mine_select.png" style="label-color:#000000,#c91f3a">
+                <title style="background:#ffffff;padding:10 13">
+                    <left><button style="background:setting.png;height:18;width:18;padding:0" href="setting.xml"></button></left>
+                    <center><label style="font-size:14;color:#333333">我的考拉</label></center>
+                    <right><button style="background:message.png;height:20;width:20;color:#ffffff">dial</button></right>
+                </title>-
+                <content>
+                    <list type="transparent" style="background:#f0f0f0">
+                        <item style="background:#e5ecf4">
+                            <col>
+                                <row style="height:59;width:59;margin:17 0 7"><img src="http://imgsrc.baidu.com/forum/w%3D580/sign=e2b59ea50c2442a7ae0efdade142ad95/eb8d36087bf40ad11e3d63c5542c11dfa8ecce36.jpg"/></row>
+                                <row><label style="font-size:14;color:#333333;align:center">莳萝泡菜</label></row>
+                            </col>
+                        </item>
+                        <item style="background:#e5ecf4;padding:18 0 0">
+                            <col style="background:#f2f6fa;padding:11 0 7">
+                                <row><label style="align:center;color:#333333;font-size:11">45</label></row>
+                                <row><label style="align:center;color:#333333;font-size:10">我的考拉豆</label></row>
+                            </col>
+                            <col style="background:#f2f6fa">
+                                <row><label style="align:center;color:#333333;font-size:11">3</label></row>
+                                <row><label style="align:center;color:#333333;font-size:10">我的收藏</label></row>
+                            </col>
+                            <col style="background:#f2f6fa">
+                                <row><label style="align:center;color:#333333;font-size:11">8</label></row>
+                                <row><label style="align:center;color:#333333;font-size:10">关注的品牌</label></row>
+                            </col>
+                        </item>
+                    </list>
+                    <list>
+                        <item style="background:#ffffff;padding:15 12">
+                            <col><row>
+                                <label style="font-size:12;color:#333333">我的订单</label>
+                                <label style="align:right;color:#a4a4a4;font-size:10;padding-right:12">查看全部订单</label>
+                                <icon style="height:11;align:right" src="details_right.png"/>
+                            </row></col>
+                        </item>
+                        <item style="background:#ffffff;padding:5 0 5;margin-top:1">
+                            <col style="padding:10">
+                                <row><icon style="height:20;width:20;align:center" src="pay.png"/></row>
+                                <row><label style="color:#333333;font-size:10;align:center;padding-top:3">待付款</label></row>
+                            </col>
+                            <col>
+                                <row><icon style="height:20;width:20;align:center" src="deliver.png"/></row>
+                                <row><label style="color:#333333;font-size:10;align:center;padding-top:3">待发货</label></row>
+                            </col>
+                            <col>
+                                <row><icon style="height:20;width:20;align:center" src="takedeliver.png"/></row>
+                                <row><label style="color:#333333;font-size:10;align:center;padding-top:3">待收货</label></row>
+                            </col>
+                            <col>
+                                <row><icon  style="height:20;width:20;align:center" src="evaluate.png"/></row>
+                                <row><label style="color:#333333;font-size:10;align:center;padding-top:3">待评价</label></row>
+                            </col>
+                        </item>
+                    </list>
+                    <list>
+                        <item style="padding:13 12 13" href="">
+                            <col>
+                                <row><label style="font-size:12;color:#333333">我的优惠券</label>
+                                    <label style="font-size:10;color:#a4a4a4;align:right;padding-right:12">1张优惠券</label>
+                                    <icon style="height:11;align:right" src="details_right.png"/>
+                                </row>
+                            </col>
+                        </item>
+                        <item style="padding:13 12 13" href="">
+                            <col>
+                                <row><label style="font-size:12;color:#333333">我的实名认证</label></row>
+                            </col>
+                        </item>
+                        <item style="padding:13 12 13" href="">
+                            <col>
+                                <row><label style="font-size:12;color:#333333">我的收获地址</label></row>
+                            </col>
+                        </item>
+                        <item style="padding:13 12 13" href="">
+                            <col>
+                                <row>
+                                    <label style="font-size:12;color:#333333">分享赚钱</label>
+                                    <label style="font-size:10;color:#a4a4a4;align:right;padding-right:12">最高赚30%</label>
+                                    <icon style="height:11;align:right" src="details_right.png"/>
+                                </row>
+                            </col>
+                        </item>
+                        <item style="padding:13 12 13" href="">
+                            <col>
+                                <row>
+                                    <label style="font-size:12;color:#333333">邀请好友</label>
+                                    <label style="font-size:10;color:#a4a4a4;align:right;padding-right:12">立省30元</label>
+                                    <icon style="height:11;align:right" src="details_right.png"/>
+                                </row>
+                            </col>
+                        </item>
+                    </list>
+                </content>
+            </tab>
+        </tabs>
+    </page>
+</imag>
